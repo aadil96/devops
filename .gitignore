@@ -1,0 +1,29 @@
+# Virtual environments
+venv/
+env/
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Log files
+*.log
+logs/
+
+# Database files
+*.sqlite3
+
+# Configuration files
+.env
+config.ini
