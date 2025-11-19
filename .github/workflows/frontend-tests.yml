@@ -6,8 +6,10 @@ on:
 jobs:
   check_paths:
     runs-on: ubuntu-latest
+
     outputs:
       should_run: ${{ steps.filter.outputs.frontend }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3.0.2
@@ -48,10 +50,6 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          uv run pytest
-
-      - name: Run tests with coverage
-        run: |
           uv run pytest tests/ -v --cov=src/frontend --cov-report=xml --cov-fail-under=80
 
       - name: Upload coverage report
@@ -77,3 +75,17 @@ jobs:
           header: test-coverage
           recreate: true
           path: code-coverage-results.md
+
+      - name: Build Docker image
+        run: docker build -t frontend-app:latest .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: "frontend-app:latest"
+          format: "table"
+          exit-code: "0"
+          # exit-code: '1' # Fail the workflow if vulnerabilities are found.
+          ignore-unfixed: true
+          vuln-type: "os,library"
+          severity: "CRITICAL,HIGH"
