@@ -7,14 +7,14 @@ jobs:
   check_paths:
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ steps.filter.outputs.backend }}
+      should_run: ${{ steps.filter.outputs.frontend }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3.0.2
         id: filter
         with:
           filters: |
-            backend:
+            frontend:
               - 'src/frontend/**'
               - '.github/workflows/frontend-tests.yaml'
 
@@ -48,16 +48,12 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          uv run pytest
-
-      - name: Run tests with coverage
-        run: |
           uv run pytest tests/ -v --cov=src/frontend --cov-report=xml --cov-fail-under=80
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
+          name: frontend-coverage-report
           path: ./src/frontend/coverage.xml
           retention-days: 7
         if: ${{ always() }}
@@ -74,7 +70,7 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
         with:
-          header: test-coverage
+          header: frontend-test-coverage
           recreate: true
           path: code-coverage-results.md
 
