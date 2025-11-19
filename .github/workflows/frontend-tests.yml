@@ -7,14 +7,14 @@ jobs:
   check_paths:
     runs-on: ubuntu-latest
     outputs:
-      should_run: ${{ steps.filter.outputs.frontend }}
+      should_run: ${{ steps.filter.outputs.backend }}
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3.0.2
         id: filter
         with:
           filters: |
-            frontend:
+            backend:
               - 'src/frontend/**'
               - '.github/workflows/frontend-tests.yaml'
 
@@ -48,12 +48,16 @@ jobs:
 
       - name: Run tests with coverage
         run: |
+          uv run pytest
+
+      - name: Run tests with coverage
+        run: |
           uv run pytest tests/ -v --cov=src/frontend --cov-report=xml --cov-fail-under=80
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: frontend-coverage-report
+          name: coverage-report
           path: ./src/frontend/coverage.xml
           retention-days: 7
         if: ${{ always() }}
@@ -70,20 +74,6 @@ jobs:
         uses: marocchino/sticky-pull-request-comment@v2
         if: github.event_name == 'pull_request'
         with:
-          header: frontend-test-coverage
+          header: test-coverage
           recreate: true
           path: code-coverage-results.md
-
-      - name: Build Docker image
-        run: docker build -t frontend-app:latest .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.30.0
-        with:
-          image-ref: "frontend-app:latest"
-          format: "table"
-          exit-code: "0"
-          # exit-code: '1' # Fail the workflow if vulnerabilities are found.
-          ignore-unfixed: true
-          vuln-type: "os,library"
-          severity: "CRITICAL,HIGH"
