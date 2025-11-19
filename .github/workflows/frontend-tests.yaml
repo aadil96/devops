@@ -6,8 +6,10 @@ on:
 jobs:
   check_paths:
     runs-on: ubuntu-latest
+
     outputs:
       should_run: ${{ steps.filter.outputs.frontend }}
+
     steps:
       - uses: actions/checkout@v4
       - uses: dorny/paths-filter@v3.0.2
@@ -45,10 +47,6 @@ jobs:
         run: |
           uv run ruff check --output-format=github --target-version=py313 src tests
           uv run ruff format --diff --check --target-version=py313 src tests
-
-      - name: Run tests with coverage
-        run: |
-          uv run pytest
 
       - name: Run tests with coverage
         run: |
