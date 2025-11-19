@@ -79,7 +79,7 @@ jobs:
           path: code-coverage-results.md
 
       - name: Build Docker image
-        run: docker build -t backend-app:latest .
+        run: docker build -t frontend-app:latest .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.30.0
