@@ -17,7 +17,7 @@
     "src/frontend": {
       "release-type": "python",
       "package-name": "study-tracker-frontend",
-      "component": "backend",
+      "component": "frontend",
       "include-component-in-tag": true,
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
