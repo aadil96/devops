@@ -31,7 +31,6 @@ def format_session(session: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # Helper functions for API calls
-# Helper functions for API calls
 def get_sessions() -> List[Dict[str, Any]]:
     """Get all study sessions from the API"""
     try:
