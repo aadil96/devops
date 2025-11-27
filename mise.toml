@@ -1,4 +1,6 @@
 [tools]
+k3d = "latest"
+kubectl = "latest"
 pre-commit = "latest"
 python = "3.13"
 ruff = "latest"
@@ -12,6 +14,10 @@ experimental = true
 [env]
 APP_REPO = 'devops'
 GITOPS_REPO = 'devops-gitops'
+
+[tasks.k8s-setup-local]
+description = "Set up a basic Kubernetes cluster for development that builds the local images and applies them"
+run = "bash ./kubernetes/setup_cluster_local"
 
 [hooks]
 enter = "bash ./scripts/setup_project"
